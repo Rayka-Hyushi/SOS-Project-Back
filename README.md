@@ -46,7 +46,7 @@ docker-compose up -d --build
 ```
 
 3. Após a conclusão do processo, a aplicação estará disponível em `http://localhost:8081` e o banco de dados postgres
-estará acessível através de `http://localhost:5433/poow2`.
+estará acessível através de `http://localhost:5433/POOW2`.
 
 
 # Créditos
