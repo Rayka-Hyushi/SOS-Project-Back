@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +21,7 @@ import rayka.sos.model.OrdemServico;
 import rayka.sos.model.Usuario;
 import rayka.sos.service.OrdemServicoService;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -57,10 +61,17 @@ public class OrdemServicoController {
         @ApiResponse(responseCode = "403", description = "Não autorizado")
     })
     @GetMapping
-    public ResponseEntity<List<OrdemServicoResponseDTO>> listarOrdens() {
-        List<OrdemServico> ordens = ordemServicoService.readAll(getUsuarioLogado());
-        List<OrdemServicoResponseDTO> dtos = ordens.stream().map(OrdemServicoResponseDTO::new).toList();
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<Page<OrdemServicoResponseDTO>> listarOrdens(
+        @RequestParam(required = false) String cliente,
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim,
+        @RequestParam(required = false) Boolean filtrarDataCriacao,
+        @PageableDefault(sort = "osid") Pageable pageable
+    ) {
+        Page<OrdemServico> ordens = ordemServicoService.readAll(getUsuarioLogado(), cliente, status, dataInicio, dataFim, filtrarDataCriacao, pageable);
+        Page<OrdemServicoResponseDTO> ordensDTOPage = ordens.map(OrdemServicoResponseDTO::new);
+        return ResponseEntity.ok(ordensDTOPage);
     }
 
     @Operation(summary = "Buscar Ordem de Serviço", description = "Retorna uma OS específica pelo UUID.")

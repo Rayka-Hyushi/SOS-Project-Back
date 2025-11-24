@@ -2,6 +2,8 @@ package rayka.sos.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rayka.sos.dto.OrdemServicoRequestDTO;
 import rayka.sos.model.*;
@@ -10,6 +12,7 @@ import rayka.sos.repository.OrdemServicoRepository;
 import rayka.sos.repository.ServicoRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,8 +51,39 @@ public class OrdemServicoService {
     }
 
     // Operação de read de todas as ordens do usuário
-    public List<OrdemServico> readAll(Usuario usuario) {
-        return ordemServicoRepository.findByUsuario(usuario);
+    public Page<OrdemServico> readAll(Usuario usuario, String clienteFiltro, String status, LocalDate dataInicio, LocalDate dataFim, Boolean filtrarDataCriacao, Pageable pageable) {
+        if (clienteFiltro != null && !clienteFiltro.isEmpty()) {
+            return ordemServicoRepository.findByUsuarioAndClienteContainingIgnoreCase(
+                usuario,
+                clienteFiltro,
+                pageable
+            );
+        } else if (status != null && !status.isEmpty()) {
+            return ordemServicoRepository.findByUsuarioAndStatus(
+                usuario,
+                status,
+                pageable
+            );
+        } else if (dataInicio != null && dataFim != null) {
+            if (filtrarDataCriacao) {
+                return ordemServicoRepository.findByUsuarioAndDataCriacaoBetween(
+                    usuario,
+                    dataInicio,
+                    dataFim,
+                    pageable
+                );
+            }
+            else {
+                return ordemServicoRepository.findByUsuarioAndDataEncerramentoBetween(
+                    usuario,
+                    dataInicio,
+                    dataFim,
+                    pageable
+                );
+            }
+        } else {
+            return ordemServicoRepository.findByUsuario(usuario, pageable);
+        }
     }
 
     // Operação de read único
