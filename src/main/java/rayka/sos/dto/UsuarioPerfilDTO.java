@@ -22,6 +22,9 @@ public class UsuarioPerfilDTO {
     @Schema(description = "Foto de perfil do usuário codificada em Base64. Pode ser nula.", example = "iVBORw0KAAAhEUgA...")
     private String photo;
 
+    @Schema(description = "Tipo da foto de perfil do usuário", example = "image/png")
+    private String photoType;
+
     public UsuarioPerfilDTO(Usuario usuario) {
         this.uuid = usuario.getUuid();
         this.name = usuario.getName();
@@ -29,6 +32,7 @@ public class UsuarioPerfilDTO {
 
         if (usuario.getPhoto() != null) {
             this.photo = Base64.getEncoder().encodeToString(usuario.getPhoto());
+            this.photoType = usuario.getPhotoType();
         } else {
             this.photo = null;
         }

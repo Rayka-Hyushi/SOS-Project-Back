@@ -36,11 +36,11 @@ public class OrdemServicoController {
 
     @Operation(summary = "Criar Ordem de Serviço", description = "Cadastra uma nova OS, associada ao usuário logado.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "OS criada com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OrdemServico.class))),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida (Dados ausentes ou Cliente/Serviço não encontrados)"),
-            @ApiResponse(responseCode = "403", description = "Não autorizado")
+        @ApiResponse(responseCode = "201", description = "OS criada com sucesso",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = OrdemServico.class))),
+        @ApiResponse(responseCode = "400", description = "Requisição inválida (Dados ausentes ou Cliente/Serviço não encontrados)"),
+        @ApiResponse(responseCode = "403", description = "Não autorizado")
     })
     @PostMapping
     public ResponseEntity<OrdemServicoResponseDTO> criarOrdem(@RequestBody OrdemServicoRequestDTO osrDTO) {
@@ -51,10 +51,10 @@ public class OrdemServicoController {
 
     @Operation(summary = "Listar Ordens de Serviço", description = "Retorna todas as OS's do usuário logado.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de OS's retornada com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = OrdemServico.class)))),
-            @ApiResponse(responseCode = "403", description = "Não autorizado")
+        @ApiResponse(responseCode = "200", description = "Lista de OS's retornada com sucesso",
+            content = @Content(mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = OrdemServico.class)))),
+        @ApiResponse(responseCode = "403", description = "Não autorizado")
     })
     @GetMapping
     public ResponseEntity<List<OrdemServicoResponseDTO>> listarOrdens() {
@@ -65,42 +65,42 @@ public class OrdemServicoController {
 
     @Operation(summary = "Buscar Ordem de Serviço", description = "Retorna uma OS específica pelo UUID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OS encontrada com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OrdemServico.class))),
-            @ApiResponse(responseCode = "403", description = "Não autorizado"),
-            @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
+        @ApiResponse(responseCode = "200", description = "OS encontrada com sucesso",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = OrdemServico.class))),
+        @ApiResponse(responseCode = "403", description = "Não autorizado"),
+        @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
     })
     @GetMapping("/{uuid}")
     public ResponseEntity<OrdemServicoResponseDTO> buscarOrdem(@PathVariable UUID uuid) {
         return ordemServicoService.readOne(uuid, getUsuarioLogado())
-                .map(OrdemServicoResponseDTO::new)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            .map(OrdemServicoResponseDTO::new)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Atualizar Ordem de Serviço", description = "Atualiza os dados de uma OS existente pelo UUID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OS atualizada com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OrdemServico.class))),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida (Dados ausentes ou Cliente/Serviço não encontrados)"),
-            @ApiResponse(responseCode = "403", description = "Não autorizado"),
-            @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
+        @ApiResponse(responseCode = "200", description = "OS atualizada com sucesso",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = OrdemServico.class))),
+        @ApiResponse(responseCode = "400", description = "Requisição inválida (Dados ausentes ou Cliente/Serviço não encontrados)"),
+        @ApiResponse(responseCode = "403", description = "Não autorizado"),
+        @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
     })
     @PutMapping("/{uuid}")
     public ResponseEntity<OrdemServicoResponseDTO> atualizarOrdem(@PathVariable UUID uuid, @RequestBody OrdemServicoRequestDTO osrUpdate) {
         return ordemServicoService.update(uuid, osrUpdate, getUsuarioLogado())
-                .map(OrdemServicoResponseDTO::new)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            .map(OrdemServicoResponseDTO::new)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Remover Ordem de Serviço", description = "Remove uma OS pelo UUID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "OS removida com sucesso"),
-            @ApiResponse(responseCode = "403", description = "Não autorizado"),
-            @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
+        @ApiResponse(responseCode = "204", description = "OS removida com sucesso"),
+        @ApiResponse(responseCode = "403", description = "Não autorizado"),
+        @ApiResponse(responseCode = "404", description = "OS não encontrada ou não pertence ao usuário logado")
     })
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> removerOrdem(@PathVariable UUID uuid) {

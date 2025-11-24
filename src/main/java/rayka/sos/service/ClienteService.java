@@ -2,6 +2,8 @@ package rayka.sos.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rayka.sos.model.Cliente;
 import rayka.sos.model.Usuario;
@@ -24,10 +26,12 @@ public class ClienteService {
     }
 
     // Operacao de read de todos os clientes do usuario
-    public List<Cliente> readAll(Usuario usuario) {
-        return clienteRepository.findByUsuario(usuario);
+    public Page<Cliente> readAll(Usuario usuario, String nomeFiltro, Pageable pageable) {
+        if (nomeFiltro != null && !nomeFiltro.isEmpty()) {
+            return clienteRepository.findByUsuarioAndNameContainingIgnoreCase(usuario, nomeFiltro, pageable);
+        }
+        return clienteRepository.findByUsuario(usuario, pageable);
     }
-
 
     // Operacao de read unico
     public Optional<Cliente> readOne(UUID uuid, Usuario usuario) {
@@ -38,13 +42,13 @@ public class ClienteService {
     @Transactional
     public Optional<Cliente> update(UUID clienteUuid, Cliente clienteUpdate, Usuario usuario) {
         return clienteRepository.findByUuidAndUsuario(clienteUuid, usuario)
-                .map(cliente -> {
-                    cliente.setName(clienteUpdate.getName());
-                    cliente.setPhone(clienteUpdate.getPhone());
-                    cliente.setEmail(clienteUpdate.getEmail());
-                    cliente.setAddress(clienteUpdate.getAddress());
-                    return clienteRepository.save(cliente);
-                });
+            .map(cliente -> {
+                cliente.setName(clienteUpdate.getName());
+                cliente.setPhone(clienteUpdate.getPhone());
+                cliente.setEmail(clienteUpdate.getEmail());
+                cliente.setAddress(clienteUpdate.getAddress());
+                return clienteRepository.save(cliente);
+            });
     }
 
     // Operacao de delete

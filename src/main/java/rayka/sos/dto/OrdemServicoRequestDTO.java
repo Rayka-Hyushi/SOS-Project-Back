@@ -19,7 +19,7 @@ import java.util.UUID;
 public class OrdemServicoRequestDTO {
     @NotNull(message = "O UUID do cliente é obrigatório.")
     @Schema(description = "UUID do cliente ao qual a Ordem de Serviço pertence.",
-            example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
+        example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
     private UUID clienteUuid;
 
     @NotBlank(message = "O nome do dispositivo é obrigatório.")

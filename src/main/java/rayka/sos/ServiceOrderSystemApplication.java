@@ -7,12 +7,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @OpenAPIDefinition(
-        info = @Info(
-                title = "API Service Order System",
-                version = "1.0",
-                description = "Documentação da API Service Order System",
-                contact = @Contact(name = "Suporte", email = "contato.rayka@outlook.com")
-        )
+    info = @Info(
+        title = "API Service Order System",
+        version = "1.0",
+        description = "Documentação da API Service Order System",
+        contact = @Contact(name = "Suporte", email = "contato.rayka@outlook.com")
+    )
 )
 @SpringBootApplication
 public class ServiceOrderSystemApplication {

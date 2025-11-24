@@ -24,7 +24,7 @@ public class UsuarioService {
     }
 
     // Operação de create
-    public Usuario create(UsuarioRequestDTO usuarioRequestDTO, MultipartFile photo) {
+    public String create(UsuarioRequestDTO usuarioRequestDTO, MultipartFile photo) {
         Usuario usuario = new Usuario();
 
         // Criptografia da senha e adição dos campos
@@ -37,13 +37,18 @@ public class UsuarioService {
             try {
                 usuario.setPhoto(photo.getBytes());
                 System.out.println(Arrays.toString(usuario.getPhoto()));
+                usuario.setPhotoType(photo.getContentType());
             } catch (IOException e) {
                 throw new RuntimeException("Erro ao processar a imagem enviada. " + e);
             }
         }
 
         // Salva o novo usuário
-        return usuarioRepository.save(usuario);
+        Usuario salvo = usuarioRepository.save(usuario);
+        if (salvo.getName() == null) {
+            return "Erro ao salvar o usuário.";
+        }
+        return "Usuário criado com sucesso.";
     }
 
     public Optional<Usuario> update(UUID uuid, UsuarioRequestDTO usuarioUpdate) {
@@ -62,7 +67,7 @@ public class UsuarioService {
 
     public Usuario updatePhoto(UUID uuid, MultipartFile photo) {
         Usuario usuario = usuarioRepository.findByUuid(uuid)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
         if (photo != null && !photo.isEmpty()) {
             try {

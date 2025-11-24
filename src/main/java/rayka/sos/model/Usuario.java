@@ -51,6 +51,10 @@ public class Usuario implements UserDetails {
     @Schema(description = "Foto de Perfil do Usuário em Bytes")
     private byte[] photo;
 
+    @Column(name = "photo_type", length = 50)
+    @Schema(description = "Tipo da Foto de Perfil do Usuário", example = "image/png")
+    private String photoType;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cliente> clientes;
 

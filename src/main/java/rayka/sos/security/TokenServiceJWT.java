@@ -17,11 +17,11 @@ public class TokenServiceJWT {
         try {
             Algorithm algorithm = Algorithm.HMAC256("poo2");
             return JWT.create()
-                    .withIssuer("API Service Order System")
-                    .withSubject(usuario.getUsername())
-                    .withClaim("user_uuid", usuario.getUuid().toString())
-                    .withExpiresAt(dataExpiracao())
-                    .sign(algorithm);
+                .withIssuer("API Service Order System")
+                .withSubject(usuario.getUsername())
+                .withClaim("user_uuid", usuario.getUuid().toString())
+                .withExpiresAt(dataExpiracao())
+                .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Erro ao gerar token. ", e);
         }
@@ -35,10 +35,10 @@ public class TokenServiceJWT {
         try {
             Algorithm algorithm = Algorithm.HMAC256("poo2");
             return JWT.require(algorithm)
-                    .withIssuer("API Service Order System")
-                    .build()
-                    .verify(token)
-                    .getSubject();
+                .withIssuer("API Service Order System")
+                .build()
+                .verify(token)
+                .getSubject();
         } catch (JWTVerificationException e) {
             throw new RuntimeException("Token inválido ou expirado.");
         }

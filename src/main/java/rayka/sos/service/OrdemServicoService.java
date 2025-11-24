@@ -24,7 +24,7 @@ public class OrdemServicoService {
     @Transactional
     public OrdemServico create(OrdemServicoRequestDTO osrDTO, Usuario usuario) {
         Cliente cliente = clienteRepository.findByUuidAndUsuario(osrDTO.getClienteUuid(), usuario)
-                .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado ou não pertence ao usuário."));
+            .orElseThrow(() -> new NoSuchElementException("Cliente não encontrado ou não pertence ao usuário."));
 
         Set<Servico> servicos = servicoRepository.findByUuidIn(osrDTO.getServicosUuids());
 
@@ -67,21 +67,21 @@ public class OrdemServicoService {
         }
 
         return ordemServicoRepository.findByUuidAndUsuario(osUuid, usuario)
-                .map(os -> {
-                    os.setServicos(servicos);
-                    os.setDevice(osrUpdate.getDevice());
-                    os.setDescription(osrUpdate.getDescription());
-                    if (osrUpdate.getStatus().equals(StatusOrdemServico.FINALIZADA)) {
-                        os.setStatus(StatusOrdemServico.FINALIZADA);
-                        os.setClosedate(LocalDateTime.now());
-                    } else {
-                        os.setStatus(osrUpdate.getStatus());
-                    }
-                    os.setExtras(osrUpdate.getExtras());
-                    os.setDiscount(osrUpdate.getDiscount());
-                    os.setTotal(calculaTotal(osrUpdate.getExtras(), osrUpdate.getDiscount(), servicos));
-                    return ordemServicoRepository.save(os);
-                });
+            .map(os -> {
+                os.setServicos(servicos);
+                os.setDevice(osrUpdate.getDevice());
+                os.setDescription(osrUpdate.getDescription());
+                if (osrUpdate.getStatus().equals(StatusOrdemServico.FINALIZADA)) {
+                    os.setStatus(StatusOrdemServico.FINALIZADA);
+                    os.setClosedate(LocalDateTime.now());
+                } else {
+                    os.setStatus(osrUpdate.getStatus());
+                }
+                os.setExtras(osrUpdate.getExtras());
+                os.setDiscount(osrUpdate.getDiscount());
+                os.setTotal(calculaTotal(osrUpdate.getExtras(), osrUpdate.getDiscount(), servicos));
+                return ordemServicoRepository.save(os);
+            });
     }
 
     // Operacao de delete
@@ -100,13 +100,13 @@ public class OrdemServicoService {
         BigDecimal total = BigDecimal.ZERO;
         if (!servicos.isEmpty()) {
             total = servicos.stream()
-                    .map(Servico::getValue)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(Servico::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
 
         total = total
-                .add(extras)
-                .subtract(discount);
+            .add(extras)
+            .subtract(discount);
 
         if (total.compareTo(BigDecimal.ZERO) < 0) {
             total = BigDecimal.ZERO;

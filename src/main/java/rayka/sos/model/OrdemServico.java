@@ -58,9 +58,9 @@ public class OrdemServico {
 
     @ManyToMany
     @JoinTable(
-            name = "relacao_os",
-            joinColumns = @JoinColumn(name = "os_id"),
-            inverseJoinColumns = @JoinColumn(name = "s_id")
+        name = "relacao_os",
+        joinColumns = @JoinColumn(name = "os_id"),
+        inverseJoinColumns = @JoinColumn(name = "s_id")
     )
     private Set<Servico> servicos = new HashSet<>();
 

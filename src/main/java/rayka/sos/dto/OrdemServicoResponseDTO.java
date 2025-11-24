@@ -21,15 +21,15 @@ public class OrdemServicoResponseDTO {
     private UUID uuid;
 
     @Schema(description = "UUID do cliente ao qual a Ordem de Serviço está vinculada.",
-            example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
+        example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
     private UUID clienteUuid;
 
     @Schema(description = "Nome/Modelo do dispositivo em serviço.",
-            example = "Notebook Dell Inspiron 15")
+        example = "Notebook Dell Inspiron 15")
     private String device;
 
     @Schema(description = "Descrição detalhada do problema ou serviço.",
-            example = "Reparo na tela e otimização de software.")
+        example = "Reparo na tela e otimização de software.")
     private String description;
 
     @ArraySchema(schema = @Schema(implementation = Servico.class, description = "Conjunto de serviços incluídos na Ordem de Serviço."))
@@ -57,8 +57,8 @@ public class OrdemServicoResponseDTO {
         this.description = os.getDescription();
 
         this.servicos = os.getServicos().stream()
-                .map(ServicoResponseDTO::new)
-                .collect(Collectors.toSet());
+            .map(ServicoResponseDTO::new)
+            .collect(Collectors.toSet());
 
         this.status = os.getStatus();
         this.extras = os.getExtras();

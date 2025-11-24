@@ -28,12 +28,12 @@ public class AutenticacaoController {
 
     @Operation(summary = "Login do Usuário", description = "Autentica o usuário com e-mail e senha e retorna um Token JWT.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso. Token JWT retornado.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = DadosTokenJWT.class))), // Sucesso
-            @ApiResponse(responseCode = "400", description = "Credenciais inválidas (E-mail ou senha incorretos)",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "Usuário não encontrado: [email]"))) // Falha
+        @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso. Token JWT retornado.",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = DadosTokenJWT.class))), // Sucesso
+        @ApiResponse(responseCode = "400", description = "Credenciais inválidas (E-mail ou senha incorretos)",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(example = "Usuário não encontrado: [email]"))) // Falha
     })
     @PostMapping
     public ResponseEntity login(@RequestBody DadosAutenticacao dados) {
@@ -52,9 +52,12 @@ public class AutenticacaoController {
 
     @Schema(description = "Estrutura de resposta para o Token JWT")
     private record DadosTokenJWT(@Schema(description = "Token de autenticação JWT",
-            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...") String token) {}
+        example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...") String token) {
+    }
 
     @Schema(description = "Estrutura de requisição para as credenciais de login")
-    private record DadosAutenticacao(@Schema(description = "E-mail do usuário", example = "admin@rayka.sos") String login,
-                                     @Schema(description = "Senha do usuário", example = "123456") String senha) {}
+    private record DadosAutenticacao(
+        @Schema(description = "E-mail do usuário", example = "admin@rayka.sos") String login,
+        @Schema(description = "Senha do usuário", example = "123456") String senha) {
+    }
 }

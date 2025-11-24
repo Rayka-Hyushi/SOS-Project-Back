@@ -24,8 +24,6 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Filtro para autenticacao e autorização");
-
         String tokenJWT = recuperarToken(request);
         System.out.println("TokenJWT: " + tokenJWT);
         // Se não existir token na requisição o SecurityConfig deverá bloquear
@@ -35,7 +33,7 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = this.autenticacaoService.loadUserByUsername(subject);
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 

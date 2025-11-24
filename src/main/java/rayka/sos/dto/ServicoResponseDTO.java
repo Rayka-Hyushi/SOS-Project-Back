@@ -18,12 +18,16 @@ public class ServicoResponseDTO {
     @Schema(description = "Nome do Serviço", example = "Troca de Tela")
     private String service;
 
+    @Schema(description = "Descrição do Serviço", example = "Substituição da tela defeituosa")
+    private String description;
+
     @Schema(description = "Valor base do Serviço", example = "80.00")
     private BigDecimal value;
 
     public ServicoResponseDTO(Servico servico) {
         this.uuid = servico.getUuid();
         this.service = servico.getService();
+        this.description = servico.getDescription();
         this.value = servico.getValue();
     }
 }

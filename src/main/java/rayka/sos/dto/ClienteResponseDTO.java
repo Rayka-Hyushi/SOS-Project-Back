@@ -26,15 +26,12 @@ public class ClienteResponseDTO {
     @Schema(description = "Endereço do cliente", example = "Rua Um, Bairro, Cidade - UF")
     private String address;
 
-    @Schema(description = "Referência ao usuário dono do registro do cliente")
-    private UsuarioReferenciaDTO usuario;
-
     public ClienteResponseDTO(Cliente cliente) {
         this.uuid = cliente.getUuid();
         this.name = cliente.getName();
         this.phone = cliente.getPhone();
         this.email = cliente.getEmail();
         this.address = cliente.getAddress();
-        this.usuario = new UsuarioReferenciaDTO(cliente.getUsuario());
+//        this.usuario = new UsuarioReferenciaDTO(cliente.getUsuario());
     }
 }
