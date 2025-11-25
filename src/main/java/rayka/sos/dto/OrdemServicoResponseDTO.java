@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Schema(description = "DTO de Resposta para Ordens de Serviço (Dados completos e seguros da OS)")
 public class OrdemServicoResponseDTO {
+    @Schema(description = "ID para uso do técnico")
+    private Long osid;
+
     @Schema(description = "UUID da ordem")
     private UUID uuid;
 
@@ -51,6 +54,7 @@ public class OrdemServicoResponseDTO {
     private UsuarioReferenciaDTO usuario;
 
     public OrdemServicoResponseDTO(OrdemServico os) {
+        this.osid = os.getOsid();
         this.uuid = os.getUuid();
         this.clienteUuid = os.getCliente().getUuid();
         this.device = os.getDevice();

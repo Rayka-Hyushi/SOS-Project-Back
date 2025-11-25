@@ -66,7 +66,7 @@ public class OrdemServicoService {
             );
         } else if (dataInicio != null && dataFim != null) {
             if (filtrarDataCriacao) {
-                return ordemServicoRepository.findByUsuarioAndDataCriacaoBetween(
+                return ordemServicoRepository.findByUsuarioAndOpendateBetween(
                     usuario,
                     dataInicio,
                     dataFim,
@@ -74,7 +74,7 @@ public class OrdemServicoService {
                 );
             }
             else {
-                return ordemServicoRepository.findByUsuarioAndDataEncerramentoBetween(
+                return ordemServicoRepository.findByUsuarioAndClosedateBetween(
                     usuario,
                     dataInicio,
                     dataFim,

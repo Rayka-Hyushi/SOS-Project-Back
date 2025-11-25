@@ -27,8 +27,8 @@ public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long
     Page<OrdemServico> findByUsuarioAndStatus(Usuario usuario, String status, Pageable pageable);
 
     // 3. Busca por Data de Criação (intervalo)
-    Page<OrdemServico> findByUsuarioAndDataCriacaoBetween(Usuario usuario, LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
+    Page<OrdemServico> findByUsuarioAndOpendateBetween(Usuario usuario, LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
 
     // 4. Busca por Data de Encerramento (intervalo)
-    Page<OrdemServico> findByUsuarioAndDataEncerramentoBetween(Usuario usuario, LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
+    Page<OrdemServico> findByUsuarioAndClosedateBetween(Usuario usuario, LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
 }
