@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import rayka.sos.model.Cliente;
 import rayka.sos.model.OrdemServico;
 import rayka.sos.model.Servico;
 import rayka.sos.model.StatusOrdemServico;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,19 +19,21 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Schema(description = "DTO de Resposta para Ordens de Serviço (Dados completos e seguros da OS)")
 public class OrdemServicoResponseDTO {
-    @Schema(description = "ID para uso do técnico")
-    private Long osid;
-
     @Schema(description = "UUID da ordem")
     private UUID uuid;
 
-    @Schema(description = "UUID do cliente ao qual a Ordem de Serviço está vinculada.",
-        example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
-    private UUID clienteUuid;
+    @Schema(description = "Cliente ao qual a Ordem de Serviço está vinculada.")
+    private Cliente cliente;
 
     @Schema(description = "Nome/Modelo do dispositivo em serviço.",
         example = "Notebook Dell Inspiron 15")
     private String device;
+
+    @Schema(description = "Data de criação da Ordem de Serviço.", example = "2024-06-15T14:30:00Z")
+    private LocalDateTime openDate;
+
+    @Schema(description = "Data de fechamento da Ordem de Serviço.", example = "2024-06-20T16:45:00Z")
+    private LocalDateTime closeDate;
 
     @Schema(description = "Descrição detalhada do problema ou serviço.",
         example = "Reparo na tela e otimização de software.")
@@ -54,10 +58,11 @@ public class OrdemServicoResponseDTO {
     private UsuarioReferenciaDTO usuario;
 
     public OrdemServicoResponseDTO(OrdemServico os) {
-        this.osid = os.getOsid();
         this.uuid = os.getUuid();
-        this.clienteUuid = os.getCliente().getUuid();
+        this.cliente = os.getCliente();
         this.device = os.getDevice();
+        this.openDate = os.getOpendate();
+        this.closeDate = os.getClosedate() != null ? os.getClosedate() : null;
         this.description = os.getDescription();
 
         this.servicos = os.getServicos().stream()

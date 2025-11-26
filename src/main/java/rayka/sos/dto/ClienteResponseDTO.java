@@ -32,6 +32,5 @@ public class ClienteResponseDTO {
         this.phone = cliente.getPhone();
         this.email = cliente.getEmail();
         this.address = cliente.getAddress();
-//        this.usuario = new UsuarioReferenciaDTO(cliente.getUsuario());
     }
 }
