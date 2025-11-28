@@ -22,8 +22,8 @@ public class OrdemServicoResponseDTO {
     @Schema(description = "UUID da ordem")
     private UUID uuid;
 
-    @Schema(description = "Cliente ao qual a Ordem de Serviço está vinculada.")
-    private Cliente cliente;
+    @Schema(description = "UUID do cliente ao qual a Ordem de Serviço está vinculada.", example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
+    private UUID cliente;
 
     @Schema(description = "Nome/Modelo do dispositivo em serviço.",
         example = "Notebook Dell Inspiron 15")
@@ -59,7 +59,7 @@ public class OrdemServicoResponseDTO {
 
     public OrdemServicoResponseDTO(OrdemServico os) {
         this.uuid = os.getUuid();
-        this.cliente = os.getCliente();
+        this.cliente = os.getCliente().getUuid();
         this.device = os.getDevice();
         this.openDate = os.getOpendate();
         this.closeDate = os.getClosedate() != null ? os.getClosedate() : null;
