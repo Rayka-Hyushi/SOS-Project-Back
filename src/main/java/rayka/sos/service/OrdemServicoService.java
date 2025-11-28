@@ -14,6 +14,7 @@ import rayka.sos.repository.ServicoRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -53,31 +54,34 @@ public class OrdemServicoService {
     // Operação de read de todas as ordens do usuário
     public Page<OrdemServico> readAll(Usuario usuario, String clienteFiltro, String status, LocalDate dataInicio, LocalDate dataFim, Boolean filtrarDataCriacao, Pageable pageable) {
         if (clienteFiltro != null && !clienteFiltro.isEmpty()) {
-            return ordemServicoRepository.findByUsuarioAndClienteContainingIgnoreCase(
+            return ordemServicoRepository.findByUsuarioAndClienteNameContainingIgnoreCase(
                 usuario,
                 clienteFiltro,
                 pageable
             );
         } else if (status != null && !status.isEmpty()) {
+            StatusOrdemServico enumStatus = StatusOrdemServico.valueOf(status);
             return ordemServicoRepository.findByUsuarioAndStatus(
                 usuario,
-                status,
+                enumStatus,
                 pageable
             );
         } else if (dataInicio != null && dataFim != null) {
+            LocalDateTime inicioDia = dataInicio.atStartOfDay(); // 00:00:00
+            LocalDateTime fimDia = dataFim.atTime(LocalTime.MAX);
             if (filtrarDataCriacao) {
+                // Atenção: O repositório deve aceitar LocalDateTime agora, não LocalDate
                 return ordemServicoRepository.findByUsuarioAndOpendateBetween(
                     usuario,
-                    dataInicio,
-                    dataFim,
+                    inicioDia, // Passa LocalDateTime
+                    fimDia,    // Passa LocalDateTime
                     pageable
                 );
-            }
-            else {
+            } else {
                 return ordemServicoRepository.findByUsuarioAndClosedateBetween(
                     usuario,
-                    dataInicio,
-                    dataFim,
+                    inicioDia,
+                    fimDia,
                     pageable
                 );
             }
