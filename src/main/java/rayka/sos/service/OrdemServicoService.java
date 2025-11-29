@@ -67,14 +67,13 @@ public class OrdemServicoService {
                 pageable
             );
         } else if (dataInicio != null && dataFim != null) {
-            LocalDateTime inicioDia = dataInicio.atStartOfDay(); // 00:00:00
+            LocalDateTime inicioDia = dataInicio.atStartOfDay();
             LocalDateTime fimDia = dataFim.atTime(LocalTime.MAX);
             if (filtrarDataCriacao) {
-                // Atenção: O repositório deve aceitar LocalDateTime agora, não LocalDate
                 return ordemServicoRepository.findByUsuarioAndOpendateBetween(
                     usuario,
-                    inicioDia, // Passa LocalDateTime
-                    fimDia,    // Passa LocalDateTime
+                    inicioDia,
+                    fimDia,
                     pageable
                 );
             } else {
@@ -109,11 +108,18 @@ public class OrdemServicoService {
                 os.setServicos(servicos);
                 os.setDevice(osrUpdate.getDevice());
                 os.setDescription(osrUpdate.getDescription());
-                if (osrUpdate.getStatus().equals(StatusOrdemServico.FINALIZADA)) {
-                    os.setStatus(StatusOrdemServico.FINALIZADA);
-                    os.setClosedate(LocalDateTime.now());
-                } else {
-                    os.setStatus(osrUpdate.getStatus());
+                if (!os.getStatus().equals(osrUpdate.getStatus())) {
+                    Integer currentOrder = STATUS_PRIORITY.get(os.getStatus());
+                    Integer newOrder = STATUS_PRIORITY.get(osrUpdate.getStatus());
+
+                    if (newOrder == null || currentOrder == null || newOrder < currentOrder) {
+                        throw new IllegalArgumentException("A transição de status de " + os.getStatus() + " para " + osrUpdate.getStatus() + " não é permitida. A ordem deve ser crescente.");
+                    } else if (osrUpdate.getStatus() == StatusOrdemServico.FINALIZADA) {
+                        os.setStatus(osrUpdate.getStatus());
+                        os.setClosedate(LocalDateTime.now());
+                    } else {
+                        os.setStatus(osrUpdate.getStatus());
+                    }
                 }
                 os.setExtras(osrUpdate.getExtras());
                 os.setDiscount(osrUpdate.getDiscount());
@@ -127,8 +133,14 @@ public class OrdemServicoService {
     public boolean delete(UUID osUuid, Usuario usuario) {
         Optional<OrdemServico> os = ordemServicoRepository.findByUuidAndUsuario(osUuid, usuario);
         if (os.isPresent()) {
-            ordemServicoRepository.delete(os.get());
-            return true;
+            if (os.get().getStatus() == StatusOrdemServico.FINALIZADA) {
+                return false;
+            } else {
+                if (os.get().getStatus() != StatusOrdemServico.CONCLUIDA && os.get().getServicos().isEmpty()) {
+                    ordemServicoRepository.delete(os.get());
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -151,4 +163,11 @@ public class OrdemServicoService {
         }
         return total;
     }
+
+    private static final Map<StatusOrdemServico, Integer> STATUS_PRIORITY = Map.of(
+        StatusOrdemServico.ABERTA, 1,
+        StatusOrdemServico.EM_ANDAMENTO, 2,
+        StatusOrdemServico.CONCLUIDA, 3,
+        StatusOrdemServico.FINALIZADA, 4
+    );
 }
