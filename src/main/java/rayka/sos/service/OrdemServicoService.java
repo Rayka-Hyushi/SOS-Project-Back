@@ -130,19 +130,18 @@ public class OrdemServicoService {
 
     // Operacao de delete
     @Transactional
-    public boolean delete(UUID osUuid, Usuario usuario) {
-        Optional<OrdemServico> os = ordemServicoRepository.findByUuidAndUsuario(osUuid, usuario);
-        if (os.isPresent()) {
-            if (os.get().getStatus() == StatusOrdemServico.FINALIZADA) {
-                return false;
+    public void delete(UUID osUuid, Usuario usuario) {
+        OrdemServico os = ordemServicoRepository.findByUuidAndUsuario(osUuid, usuario)
+            .orElseThrow(() -> new NoSuchElementException("Ordem de Serviço não encontrada ou não pertence ao usuário."));
+        if (os.getStatus() == StatusOrdemServico.FINALIZADA) {
+            throw new IllegalStateException("Ordem de Serviço finalizada não pode ser deletada.");
+        } else {
+            if (os.getStatus() != StatusOrdemServico.CONCLUIDA && os.getServicos().isEmpty()) {
+                ordemServicoRepository.delete(os);
             } else {
-                if (os.get().getStatus() != StatusOrdemServico.CONCLUIDA && os.get().getServicos().isEmpty()) {
-                    ordemServicoRepository.delete(os.get());
-                    return true;
-                }
+                throw new IllegalStateException("Ordem de Serviço com serviços associados ou em status 'CONCLUIDA' não pode ser deletada.");
             }
         }
-        return false;
     }
 
     // Função para calcular o valor total da ordem

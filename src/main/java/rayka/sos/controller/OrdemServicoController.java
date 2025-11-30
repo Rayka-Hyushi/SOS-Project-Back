@@ -115,7 +115,7 @@ public class OrdemServicoController {
     })
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> removerOrdem(@PathVariable UUID uuid) {
-        boolean deletado = ordemServicoService.delete(uuid, getUsuarioLogado());
-        return deletado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        ordemServicoService.delete(uuid, getUsuarioLogado());
+        return ResponseEntity.noContent().build();
     }
 }
