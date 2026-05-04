@@ -18,6 +18,7 @@ import rayka.sos.dto.UsuarioPerfilDTO;
 import rayka.sos.model.Usuario;
 import rayka.sos.service.UsuarioService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/usuarios")
 @Tag(name = "Usuários", description = "Path relacionado a operações de usuários")
