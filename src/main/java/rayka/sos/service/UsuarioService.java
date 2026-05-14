@@ -3,12 +3,10 @@ package rayka.sos.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import rayka.sos.dto.UsuarioRequestDTO;
 import rayka.sos.model.Usuario;
 import rayka.sos.repository.UsuarioRepository;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,7 +21,7 @@ public class UsuarioService {
     }
 
     // Operação de create
-    public Usuario create(UsuarioRequestDTO usuarioRequestDTO, MultipartFile photo) {
+    public Usuario create(UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = new Usuario();
 
         // Criptografia da senha e adição dos campos
@@ -31,16 +29,6 @@ public class UsuarioService {
         usuario.setName(usuarioRequestDTO.getName());
         usuario.setEmail(usuarioRequestDTO.getEmail());
         usuario.setProfilePhotoUrl(usuarioRequestDTO.getProfilePhotoUrl());
-
-        // Conversão da foto para bytes
-        if (photo != null && !photo.isEmpty()) {
-            try {
-                usuario.setPhoto(photo.getBytes());
-                usuario.setPhotoType(photo.getContentType());
-            } catch (IOException e) {
-                throw new RuntimeException("Erro ao processar a imagem enviada. " + e);
-            }
-        }
 
         return usuarioRepository.save(usuario);
     }
@@ -58,21 +46,6 @@ public class UsuarioService {
 
             return usuarioRepository.save(usuario);
         });
-    }
-
-    public Usuario updatePhoto(UUID uuid, MultipartFile photo) {
-        Usuario usuario = usuarioRepository.findByUuid(uuid)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
-        if (photo != null && !photo.isEmpty()) {
-            try {
-                usuario.setPhoto(photo.getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException("Erro ao processar a imagem enviada. " + e);
-            }
-        }
-
-        return usuarioRepository.save(usuario);
     }
 
     public void delete(UUID uuid) {

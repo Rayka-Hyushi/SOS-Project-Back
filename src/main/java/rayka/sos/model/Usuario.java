@@ -6,13 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Types;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -44,16 +42,6 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     @Schema(description = "Senha do Usuário", example = "P4ss@241!#")
     private String pass;
-
-    @Lob
-    @Column(name = "photo")
-    @JdbcTypeCode(Types.LONGVARBINARY) // Diz ao Hibernate para usar o tipo binário grande
-    @Schema(description = "Foto de Perfil do Usuário em Bytes")
-    private byte[] photo;
-
-    @Column(name = "photo_type", length = 50)
-    @Schema(description = "Tipo da Foto de Perfil do Usuário", example = "image/png")
-    private String photoType;
 
     @Column(name = "profile_photo_url", length = 500)
     @Schema(description = "URL da foto de perfil do usuário", example = "https://cdn.exemplo.com/usuarios/foto.png", nullable = true)
