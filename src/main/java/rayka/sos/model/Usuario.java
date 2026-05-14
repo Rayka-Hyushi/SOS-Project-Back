@@ -55,6 +55,10 @@ public class Usuario implements UserDetails {
     @Schema(description = "Tipo da Foto de Perfil do Usuário", example = "image/png")
     private String photoType;
 
+    @Column(name = "profile_photo_url", length = 500)
+    @Schema(description = "URL da foto de perfil do usuário", example = "https://cdn.exemplo.com/usuarios/foto.png", nullable = true)
+    private String profilePhotoUrl;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cliente> clientes;
 

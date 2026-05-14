@@ -19,8 +19,12 @@ public class UsuarioReferenciaDTO {
     @Schema(description = "Nome do usuário", example = "Rayka")
     private String name;
 
+    @Schema(description = "URL da foto de perfil do usuário", example = "https://cdn.exemplo.com/usuarios/foto.png", nullable = true)
+    private String profilePhotoUrl;
+
     public UsuarioReferenciaDTO(Usuario usuario) {
         this.uuid = usuario.getUuid();
         this.name = usuario.getName();
+        this.profilePhotoUrl = usuario.getProfilePhotoUrl();
     }
 }

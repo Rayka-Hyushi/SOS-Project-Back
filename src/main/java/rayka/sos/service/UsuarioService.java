@@ -9,7 +9,6 @@ import rayka.sos.model.Usuario;
 import rayka.sos.repository.UsuarioRepository;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,37 +23,33 @@ public class UsuarioService {
     }
 
     // Operação de create
-    public String create(UsuarioRequestDTO usuarioRequestDTO, MultipartFile photo) {
+    public Usuario create(UsuarioRequestDTO usuarioRequestDTO, MultipartFile photo) {
         Usuario usuario = new Usuario();
 
         // Criptografia da senha e adição dos campos
         usuario.setPass(new BCryptPasswordEncoder().encode(usuarioRequestDTO.getPass()));
         usuario.setName(usuarioRequestDTO.getName());
         usuario.setEmail(usuarioRequestDTO.getEmail());
+        usuario.setProfilePhotoUrl(usuarioRequestDTO.getProfilePhotoUrl());
 
         // Conversão da foto para bytes
         if (photo != null && !photo.isEmpty()) {
             try {
                 usuario.setPhoto(photo.getBytes());
-                System.out.println(Arrays.toString(usuario.getPhoto()));
                 usuario.setPhotoType(photo.getContentType());
             } catch (IOException e) {
                 throw new RuntimeException("Erro ao processar a imagem enviada. " + e);
             }
         }
 
-        // Salva o novo usuário
-        Usuario salvo = usuarioRepository.save(usuario);
-        if (salvo.getName() == null) {
-            return "Erro ao salvar o usuário.";
-        }
-        return "Usuário criado com sucesso.";
+        return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> update(UUID uuid, UsuarioRequestDTO usuarioUpdate) {
         return usuarioRepository.findByUuid(uuid).map(usuario -> {
             usuario.setName(usuarioUpdate.getName());
             usuario.setEmail(usuarioUpdate.getEmail());
+            usuario.setProfilePhotoUrl(usuarioUpdate.getProfilePhotoUrl());
 
             if (usuarioUpdate.getPass() != null && !usuarioUpdate.getPass().isEmpty()) {
                 String passwordCoded = new BCryptPasswordEncoder().encode(usuarioUpdate.getPass());

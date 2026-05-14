@@ -25,10 +25,14 @@ public class UsuarioPerfilDTO {
     @Schema(description = "Tipo da foto de perfil do usuário", example = "image/png")
     private String photoType;
 
+    @Schema(description = "URL da foto de perfil do usuário", example = "https://cdn.exemplo.com/usuarios/foto.png", nullable = true)
+    private String profilePhotoUrl;
+
     public UsuarioPerfilDTO(Usuario usuario) {
         this.uuid = usuario.getUuid();
         this.name = usuario.getName();
         this.email = usuario.getEmail();
+        this.profilePhotoUrl = usuario.getProfilePhotoUrl();
 
         if (usuario.getPhoto() != null) {
             this.photo = Base64.getEncoder().encodeToString(usuario.getPhoto());
