@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import rayka.sos.model.Usuario;
 
-import java.util.Base64;
 import java.util.UUID;
 
 @Getter
@@ -19,12 +18,6 @@ public class UsuarioPerfilDTO {
     @Schema(description = "E-mail de login do usuário", example = "admin@admin.com")
     private String email;
 
-    @Schema(description = "Foto de perfil do usuário codificada em Base64. Pode ser nula.", example = "iVBORw0KAAAhEUgA...")
-    private String photo;
-
-    @Schema(description = "Tipo da foto de perfil do usuário", example = "image/png")
-    private String photoType;
-
     @Schema(description = "URL da foto de perfil do usuário", example = "https://cdn.exemplo.com/usuarios/foto.png", nullable = true)
     private String profilePhotoUrl;
 
@@ -33,12 +26,5 @@ public class UsuarioPerfilDTO {
         this.name = usuario.getName();
         this.email = usuario.getEmail();
         this.profilePhotoUrl = usuario.getProfilePhotoUrl();
-
-        if (usuario.getPhoto() != null) {
-            this.photo = Base64.getEncoder().encodeToString(usuario.getPhoto());
-            this.photoType = usuario.getPhotoType();
-        } else {
-            this.photo = null;
-        }
     }
 }
