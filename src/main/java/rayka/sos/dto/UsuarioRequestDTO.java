@@ -24,4 +24,7 @@ public class UsuarioRequestDTO {
     @NotNull
     @Size(min = 8, message = "A senha deve ter no minímo 8 caracteres.")
     private String pass;
+
+    @Size(max = 500, message = "A URL da foto de perfil não pode ter mais de 500 caracteres.")
+    private String profilePhotoUrl;
 }

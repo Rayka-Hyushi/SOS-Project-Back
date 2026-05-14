@@ -36,15 +36,16 @@ public class UsuarioController {
     @Operation(summary = "Cadastrar Usuário", description = "Cria um novo usuário no banco.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioPerfilDTO.class))),
         @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
         @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     @PostMapping(consumes = {"multipart/form-data"}) // Multipart para permitir envio da foto de perfil
-    public ResponseEntity<String> criarUsuario(
+    public ResponseEntity<UsuarioPerfilDTO> criarUsuario(
         @ModelAttribute @Valid UsuarioRequestDTO usuarioRequestDTO, // Modelo de usuario para os campos de texto
-        @RequestParam("photo") MultipartFile photo) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.create(usuarioRequestDTO, photo));
+        @RequestParam(value = "photo", required = false) MultipartFile photo) {
+        Usuario usuarioCriado = usuarioService.create(usuarioRequestDTO, photo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UsuarioPerfilDTO(usuarioCriado));
     }
 
     @Operation(summary = "Perfil de Usuário", description = "Retorna o perfil do usuário logado.")
